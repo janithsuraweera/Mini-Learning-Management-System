@@ -41,6 +41,35 @@ export default function HomePage() {
         <div className="pointer-events-none absolute -right-14 -top-14 h-72 w-72 rotate-12 rounded-full bg-primary-100/70 blur-2xl" />
         <div className="pointer-events-none absolute -left-14 -bottom-14 h-72 w-72 -rotate-12 rounded-full bg-secondary-100/70 blur-2xl" />
       </section>
+
+      {/* Featured Categories */}
+      <section className="mt-8">
+        <h2 className="mb-3 text-lg font-semibold">Featured categories</h2>
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {[
+            { name: 'Web Dev', color: 'from-primary-100 to-white' },
+            { name: 'Design', color: 'from-pink-100 to-white' },
+            { name: 'Data', color: 'from-emerald-100 to-white' },
+            { name: 'Mobile', color: 'from-amber-100 to-white' },
+            { name: 'AI', color: 'from-purple-100 to-white' }
+          ].map((c) => (
+            <div key={c.name} className={`rounded-lg border border-gray-200 bg-gradient-to-br ${c.color} p-4 text-sm font-medium text-gray-800 shadow-sm`}>{c.name}</div>
+          ))}
+        </div>
+      </section>
+
+      {/* Trending Courses callout */}
+      <section className="mt-10">
+        <div className="card p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="card-header">Trending now</div>
+              <div className="muted">Top picks from our instructors</div>
+            </div>
+            <Button variant="gradient" onClick={() => navigate('/courses')}>Browse all</Button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
