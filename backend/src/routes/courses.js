@@ -1,6 +1,7 @@
 import express from 'express';
 import Course from '../models/Course.js';
 import Enrollment from '../models/Enrollment.js';
+import Payment from '../models/Payment.js';
 import { requireAuth, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -27,8 +28,8 @@ router.get('/:id', async (req, res) => {
 
 // Instructor: create course
 router.post('/', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
-  const { title, description, price } = req.body;
-  const course = await Course.create({ title, description, price: price ?? 19, instructor: req.user.id });
+  const { title, description, price, isPublished } = req.body;
+  const course = await Course.create({ title, description, price: price ?? 19, isPublished: !!isPublished, instructor: req.user.id });
   res.status(201).json(course);
 });
 
@@ -53,16 +54,31 @@ router.post('/seed', requireAuth, requireRole('instructor', 'admin'), async (req
   res.status(201).json({ created: created.length });
 });
 
+// Instructor/Admin: clear seeded demo data for this instructor
+router.post('/seed/clear', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
+  const demoCourses = await Course.find({ instructor: req.user.id, title: /^Sample Course/ });
+  const ids = demoCourses.map((c) => c._id);
+  if (ids.length) {
+    await Promise.all([
+      Course.deleteMany({ _id: { $in: ids } }),
+      Enrollment.deleteMany({ course: { $in: ids } }),
+      Payment.deleteMany({ course: { $in: ids } })
+    ]);
+  }
+  res.json({ removed: ids.length });
+});
+
 // Instructor: update course
 router.put('/:id', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course) return res.status(404).json({ error: 'Not found' });
   if (String(course.instructor) !== req.user.id && req.user.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
-  const { title, description, lessons, isPublished } = req.body;
+  const { title, description, lessons, isPublished, price } = req.body;
   if (title !== undefined) course.title = title;
   if (description !== undefined) course.description = description;
   if (Array.isArray(lessons)) course.lessons = lessons;
   if (isPublished !== undefined) course.isPublished = isPublished;
+  if (price !== undefined) course.price = price;
   await course.save();
   res.json(course);
 });

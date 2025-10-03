@@ -13,6 +13,7 @@ import { ToastProvider } from './components/Toast.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import StudentDashboard from './pages/StudentDashboard.jsx';
 import PaymentsPage from './pages/PaymentsPage.jsx';
+import InstructorCourseEdit from './pages/InstructorCourseEdit.jsx';
 
 function Layout({ children }) {
   return (
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/courses/:id" element={<CourseDetailPage />} />
             <Route path="/instructor" element={<ProtectedRoute roles={["instructor", "admin"]}><InstructorDashboard /></ProtectedRoute>} />
             <Route path="/instructor/courses/new" element={<ProtectedRoute roles={["instructor", "admin"]}><InstructorCourseNew /></ProtectedRoute>} />
+            <Route path="/instructor/courses/:id/edit" element={<ProtectedRoute roles={["instructor", "admin"]}><InstructorCourseEdit /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute roles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
             <Route path="/me" element={<ProtectedRoute roles={["student", "admin"]}><StudentDashboard /></ProtectedRoute>} />
             <Route path="/payments" element={<ProtectedRoute roles={["student", "admin"]}><PaymentsPage /></ProtectedRoute>} />

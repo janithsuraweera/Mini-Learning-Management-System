@@ -39,6 +39,21 @@ export default function InstructorDashboard() {
           >
             Seed demo
           </button>
+          <button
+            onClick={async () => {
+              try {
+                const res = await api.post('/courses/seed/clear');
+                toast?.show(`Removed ${res.data.removed} demo courses`, 'success');
+                const list = await api.get('/courses/mine');
+                setCourses(list.data);
+              } catch (e) {
+                toast?.show('Failed to clear demo courses', 'error');
+              }
+            }}
+            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Clear demo
+          </button>
           <Link to="/instructor/courses/new" className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
             New Course
           </Link>
@@ -58,7 +73,10 @@ export default function InstructorDashboard() {
             .map((c) => (
               <div key={c._id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
                 <div className="text-lg font-medium">{c.title}</div>
-                <div className="mt-1 text-sm text-gray-600">{c.isPublished ? 'Published' : 'Draft'}</div>
+                <div className="mt-1 text-sm text-gray-600">{c.isPublished ? 'Published' : 'Draft'} • ${c.price}</div>
+                <div className="mt-3 flex items-center gap-2">
+                  <Link to={`/instructor/courses/${c._id}/edit`} className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm hover:bg-gray-50">Edit</Link>
+                </div>
               </div>
             ))}
         </div>

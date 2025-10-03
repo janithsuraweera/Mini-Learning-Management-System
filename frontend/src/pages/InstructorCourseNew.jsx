@@ -8,6 +8,8 @@ export default function InstructorCourseNew() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [price, setPrice] = useState(19);
+  const [publish, setPublish] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +18,7 @@ export default function InstructorCourseNew() {
     setError('');
     setLoading(true);
     try {
-      const { data } = await api.post('/courses', { title, description });
+      const { data } = await api.post('/courses', { title, description, price: Number(price), isPublished: publish });
       navigate('/instructor');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create course');
@@ -37,6 +39,12 @@ export default function InstructorCourseNew() {
           <span className="text-sm text-gray-700">Description</span>
           <textarea className="min-h-28 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="Course overview" value={description} onChange={(e) => setDescription(e.target.value)} />
         </label>
+        <div className="grid grid-cols-2 gap-4">
+          <Input label="Price ($)" type="number" min="0" value={price} onChange={(e) => setPrice(e.target.value)} />
+          <label className="mt-6 inline-flex items-center gap-2 text-sm text-gray-700">
+            <input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} /> Publish now
+          </label>
+        </div>
         <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create course'}</Button>
         {error && <div className="text-sm text-red-600">{error}</div>}
       </form>
