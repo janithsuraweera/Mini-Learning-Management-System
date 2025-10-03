@@ -33,4 +33,18 @@ export default function RegisterPage() {
         <Input label="Name" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
         <Input label="Email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input label="Password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <label cl
+        <label className="grid gap-1">
+          <span className="text-sm text-gray-700">Role</span>
+          <select className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600" value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+          </select>
+        </label>
+        <Button type="submit" className="w-full">Create account</Button>
+        {error && <div className="text-sm text-red-600">{error}</div>}
+      </form>
+    </div>
+  );
+}
+
+

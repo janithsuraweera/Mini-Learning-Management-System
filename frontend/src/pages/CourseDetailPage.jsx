@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Button from '../components/Button.jsx';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -27,21 +28,27 @@ export default function CourseDetailPage() {
     }
   }
 
-  if (!course) return <div>Loading...</div>;
+  if (!course) return <div className="text-sm text-gray-600">Loading...</div>;
 
   return (
-    <div>
-      <h2>{course.title}</h2>
-      <p>{course.description}</p>
-      <button onClick={enroll}>Enroll</button>
-      {message && <div style={{ color: 'green' }}>{message}</div>}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      <h3>Lessons</h3>
-      <ol>
-        {(course.lessons || []).map((l, idx) => (
-          <li key={idx}>{l.title}</li>
-        ))}
-      </ol>
+    <div className="grid gap-6">
+      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <h1 className="text-2xl font-semibold">{course.title}</h1>
+        <p className="mt-2 text-gray-700">{course.description}</p>
+        <div className="mt-4">
+          <Button onClick={enroll}>Enroll</Button>
+        </div>
+        {message && <div className="mt-3 text-sm text-green-700">{message}</div>}
+        {error && <div className="mt-3 text-sm text-red-700">{error}</div>}
+      </div>
+      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="mb-3 text-lg font-medium">Lessons</h2>
+        <ol className="list-decimal space-y-2 pl-5">
+          {(course.lessons || []).map((l, idx) => (
+            <li key={idx} className="text-gray-800">{l.title}</li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }
