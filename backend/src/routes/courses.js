@@ -11,6 +11,13 @@ router.get('/', async (req, res) => {
   res.json(courses);
 });
 
+// Instructor: list my courses
+router.get('/mine', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
+  const filter = req.user.role === 'admin' ? {} : { instructor: req.user.id };
+  const courses = await Course.find(filter).sort({ createdAt: -1 });
+  res.json(courses);
+});
+
 // Public: get single published course
 router.get('/:id', async (req, res) => {
   const course = await Course.findOne({ _id: req.params.id, isPublished: true }).populate('instructor', 'name');

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api.js';
 import { useNavigate } from 'react-router-dom';
 import Input from '../components/Input.jsx';
 import Button from '../components/Button.jsx';
@@ -14,8 +14,9 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     try {
-      const { data } = await axios.post('/api/auth/login', { email, password });
+      const { data } = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/courses');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
