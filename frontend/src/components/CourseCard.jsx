@@ -16,7 +16,13 @@ function Rating({ value = 0 }) {
 export default function CourseCard({ course }) {
   return (
     <Link to={`/courses/${course._id}`} className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
-      <div className="h-40 bg-gradient-to-br from-primary-50 to-white" />
+      <div className="h-40 overflow-hidden">
+        <img
+          alt={course.title}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          src={`https://source.unsplash.com/collection/190727/600x400?sig=${(course._id || '').slice(-3)}`}
+        />
+      </div>
       <div className="space-y-1 p-4">
         <div className="flex items-center gap-2">
           {course.isPublished ? (
