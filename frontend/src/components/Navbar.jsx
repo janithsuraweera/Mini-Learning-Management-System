@@ -14,7 +14,10 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-10 border-b border-gray-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link to="/" className="text-lg font-semibold text-gray-900">Mini LMS</Link>
+        <Link to="/" className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+          <span className="inline-block h-6 w-6 rounded bg-gradient-to-br from-primary-500 to-accent-500" />
+          Mini LMS
+        </Link>
         <nav className="flex items-center gap-4 text-sm">
           <Link to="/courses" className="text-gray-600 hover:text-gray-900">Courses</Link>
           <ThemeToggle />

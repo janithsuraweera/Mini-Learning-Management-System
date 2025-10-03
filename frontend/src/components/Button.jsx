@@ -3,7 +3,8 @@ export default function Button({ children, className = '', variant = 'primary', 
   const variants = {
     primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-600',
     secondary: 'bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-900',
-    outline: 'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 focus:ring-primary-600'
+    outline: 'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 focus:ring-primary-600',
+    gradient: 'bg-gradient-to-r from-primary-600 via-accent-500 to-secondary-600 text-white hover:from-primary-700 hover:via-accent-600 hover:to-secondary-700 focus:ring-primary-600'
   };
   return (
     <button className={`${base} ${variants[variant] || variants.primary} ${className}`} {...props}>
