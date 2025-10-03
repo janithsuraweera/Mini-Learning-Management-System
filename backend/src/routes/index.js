@@ -3,6 +3,7 @@ import authRoutes from './auth.js';
 import courseRoutes from './courses.js';
 import reportRoutes from './reports.js';
 import paymentRoutes from './payments.js';
+import reviewRoutes from './reviews.js';
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.use('/auth', authRoutes);
 router.use('/courses', courseRoutes);
 router.use('/reports', reportRoutes);
 router.use('/payments', paymentRoutes);
+router.use('/reviews', reviewRoutes);
 
 export default router;
 

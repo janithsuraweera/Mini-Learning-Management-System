@@ -6,7 +6,10 @@ const paymentSchema = new mongoose.Schema(
     course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
     amount: { type: Number, required: true, min: 0 },
     currency: { type: String, default: 'USD' },
-    status: { type: String, enum: ['paid', 'refunded'], default: 'paid' }
+    status: { type: String, enum: ['paid', 'refunded'], default: 'paid' },
+    cardLast4: { type: String },
+    payerName: { type: String },
+    payerEmail: { type: String }
   },
   { timestamps: true }
 );
