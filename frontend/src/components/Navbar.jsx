@@ -22,13 +22,18 @@ export default function Navbar() {
           <Link to="/courses" className="text-gray-600 hover:text-gray-900">Courses</Link>
           <ThemeToggle />
           {user ? (
-            <>
+            <div className="flex items-center gap-3">
               {user.role === 'instructor' && (
                 <Link to="/instructor" className="text-gray-600 hover:text-gray-900">Instructor</Link>
               )}
-              <span className="hidden sm:inline text-gray-500">{user.name}</span>
+              <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-accent-500 text-xs font-bold text-white">
+                  {user.name?.[0]?.toUpperCase() || 'U'}
+                </span>
+                <span className="hidden sm:inline text-gray-700">{user.name}</span>
+              </div>
               <button onClick={onLogout} className="text-gray-600 hover:text-gray-900">Logout</button>
-            </>
+            </div>
           ) : (
             <>
               <Link to="/login" className="text-gray-600 hover:text-gray-900">Login</Link>

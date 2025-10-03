@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import api from '../utils/api.js';
+import { useAuth } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import Input from '../components/Input.jsx';
 import Button from '../components/Button.jsx';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login: setAuth } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,8 +17,8 @@ export default function LoginPage() {
     setError('');
     try {
       const { data } = await api.post('/auth/login', { email, password });
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // Update auth context so Navbar updates immediately without refresh
+      setAuth(data.token, data.user);
       navigate('/courses');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
