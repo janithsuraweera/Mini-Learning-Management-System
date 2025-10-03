@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Button from '../components/Button.jsx';
+import api from '../utils/api.js';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -16,15 +17,14 @@ export default function CourseDetailPage() {
       .catch((err) => setError(err.response?.data?.error || 'Failed to load course'));
   }, [id]);
 
-  async function enroll() {
+  async function buyAndEnroll() {
     setError('');
     setMessage('');
     try {
-      const token = localStorage.getItem('token');
-      const { data } = await axios.post(`/api/courses/${id}/enroll`, {}, { headers: { Authorization: `Bearer ${token}` } });
-      setMessage('Enrolled successfully');
+      await api.post('/payments/checkout', { courseId: id });
+      setMessage('Payment successful. Enrolled!');
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to enroll');
+      setError(err.response?.data?.error || 'Payment/enroll failed');
     }
   }
 
@@ -35,8 +35,9 @@ export default function CourseDetailPage() {
       <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-semibold">{course.title}</h1>
         <p className="mt-2 text-gray-700">{course.description}</p>
-        <div className="mt-4">
-          <Button onClick={enroll}>Enroll</Button>
+        <div className="mt-4 flex items-center gap-3">
+          <Button variant="gradient" onClick={buyAndEnroll}>Buy course • $19</Button>
+          <Button onClick={() => window.history.back()} variant="outline">Back</Button>
         </div>
         {message && <div className="mt-3 text-sm text-green-700">{message}</div>}
         {error && <div className="mt-3 text-sm text-red-700">{error}</div>}
