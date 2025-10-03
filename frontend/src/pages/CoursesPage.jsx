@@ -47,11 +47,11 @@ export default function CoursesPage() {
     <div>
       <div className="mb-6 flex items-end justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Courses</h1>
-          <p className="text-sm text-gray-600">Browse available published courses</p>
+          <h1 className="text-2xl font-semibold dark:text-gray-100">Courses</h1>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Browse available published courses</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {categories.map((c) => (
-              <button key={c} onClick={() => setCategory(c)} className={`rounded-full px-3 py-1 text-xs font-medium shadow-sm ring-1 ${category === c ? 'bg-primary-600 text-white ring-primary-600' : 'bg-white text-gray-700 ring-gray-200 hover:bg-gray-50'}`}>
+              <button key={c} onClick={() => setCategory(c)} className={`rounded-full px-3 py-1 text-xs font-medium shadow-sm ring-1 ${category === c ? 'bg-primary-600 text-white ring-primary-600' : 'bg-white text-gray-700 ring-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:ring-gray-700 dark:hover:bg-gray-700'}`}>
                 {c}
               </button>
             ))}
@@ -61,26 +61,26 @@ export default function CoursesPage() {
           <div className="w-64">
             <Input placeholder="Search courses" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
-          <select className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600" value={sort} onChange={(e) => setSort(e.target.value)}>
+          <select className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" value={sort} onChange={(e) => setSort(e.target.value)}>
             <option value="recent">Most recent</option>
             <option value="title">Title A–Z</option>
           </select>
         </div>
       </div>
-      {error && <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+      {error && <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">{error}</div>}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {pageItems.map((c) => (
           <CourseCard key={c._id} course={c} />
         ))}
       </div>
       {!courses.length && !error && (
-        <div className="rounded-md border border-gray-200 bg-white p-6 text-center text-gray-600">No courses found</div>
+        <div className="rounded-md border border-gray-200 bg-white p-6 text-center text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">No courses found</div>
       )}
       {filtered.length > pageSize && (
         <div className="mt-6 flex items-center justify-center gap-2">
-          <button className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>Prev</button>
-          <div className="text-sm text-gray-700">Page {page} of {totalPages}</div>
-          <button className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Next</button>
+          <button className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>Prev</button>
+          <div className="text-sm text-gray-700 dark:text-gray-300">Page {page} of {totalPages}</div>
+          <button className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Next</button>
         </div>
       )}
     </div>

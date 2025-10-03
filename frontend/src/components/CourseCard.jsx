@@ -15,7 +15,7 @@ function Rating({ value = 0 }) {
 
 export default function CourseCard({ course }) {
   return (
-    <Link to={`/courses/${course._id}`} className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
+    <Link to={`/courses/${course._id}`} className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
       <div className="h-40 overflow-hidden">
         <img
           alt={course.title}
@@ -26,15 +26,15 @@ export default function CourseCard({ course }) {
       <div className="space-y-1 p-4">
         <div className="flex items-center gap-2">
           {course.isPublished ? (
-            <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">Published</span>
+            <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-500/20 dark:text-green-300">Published</span>
           ) : (
-            <span className="rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">Draft</span>
+            <span className="rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300">Draft</span>
           )}
         </div>
-        <h3 className="line-clamp-2 text-base font-semibold text-gray-900 group-hover:text-primary-700">{course.title}</h3>
-        <p className="line-clamp-2 text-sm text-gray-600">{course.description}</p>
+        <h3 className="line-clamp-2 text-base font-semibold text-gray-900 group-hover:text-primary-700 dark:text-gray-100">{course.title}</h3>
+        <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-300">{course.description}</p>
         <div className="flex items-center justify-between pt-2">
-          <span className="text-sm text-gray-700">{course.instructor?.name || 'Unknown'}</span>
+          <span className="text-sm text-gray-700 dark:text-gray-300">{course.instructor?.name || 'Unknown'}</span>
           <Rating value={Math.round(((course.lessons?.length || 0) % 5) + 1)} />
         </div>
       </div>
