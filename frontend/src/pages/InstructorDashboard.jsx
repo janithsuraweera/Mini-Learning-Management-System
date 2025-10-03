@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api.js';
 import { Skeleton } from '../components/Skeleton.jsx';
+import { useToast } from '../components/Toast.jsx';
 
 export default function InstructorDashboard() {
   const [courses, setCourses] = useState(null);
   const [error, setError] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
     api
@@ -21,9 +23,26 @@ export default function InstructorDashboard() {
           <h1 className="text-2xl font-semibold">Instructor Dashboard</h1>
           <p className="text-sm text-gray-600">Manage your courses</p>
         </div>
-        <Link to="/instructor/courses/new" className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
-          New Course
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              try {
+                await api.post('/courses/seed', { count: 12 });
+                toast?.show('Seeded demo courses', 'success');
+                const res = await api.get('/courses/mine');
+                setCourses(res.data);
+              } catch (e) {
+                toast?.show('Failed to seed courses', 'error');
+              }
+            }}
+            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Seed demo
+          </button>
+          <Link to="/instructor/courses/new" className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
+            New Course
+          </Link>
+        </div>
       </div>
       {error && <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
       {courses === null ? (

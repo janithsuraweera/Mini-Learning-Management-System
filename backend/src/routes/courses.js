@@ -32,6 +32,26 @@ router.post('/', requireAuth, requireRole('instructor', 'admin'), async (req, re
   res.status(201).json(course);
 });
 
+// Instructor/Admin: seed sample courses for demo (dev helper)
+router.post('/seed', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
+  if (process.env.NODE_ENV === 'production') return res.status(403).json({ error: 'Forbidden' });
+  const { count = 9 } = req.body || {};
+  const n = Math.max(1, Math.min(30, Number(count) || 9));
+  const samples = Array.from({ length: n }).map((_, i) => ({
+    title: `Sample Course ${i + 1}`,
+    description: 'A concise, practical course to learn modern skills with projects.',
+    instructor: req.user.id,
+    isPublished: true,
+    lessons: [
+      { title: 'Introduction', content: '', order: 1 },
+      { title: 'Core Concepts', content: '', order: 2 },
+      { title: 'Project', content: '', order: 3 }
+    ]
+  }));
+  const created = await Course.insertMany(samples);
+  res.status(201).json({ created: created.length });
+});
+
 // Instructor: update course
 router.put('/:id', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
   const course = await Course.findById(req.params.id);
