@@ -10,6 +10,7 @@ export default function InstructorCourseNew() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(19);
   const [publish, setPublish] = useState(false);
+  const [category, setCategory] = useState('Web Dev');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +19,7 @@ export default function InstructorCourseNew() {
     setError('');
     setLoading(true);
     try {
-      const { data } = await api.post('/courses', { title, description, price: Number(price), isPublished: publish });
+      const { data } = await api.post('/courses', { title, description, price: Number(price), isPublished: publish, category });
       navigate('/instructor');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create course');
@@ -45,6 +46,14 @@ export default function InstructorCourseNew() {
             <input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} /> Publish now
           </label>
         </div>
+        <label className="grid gap-1">
+          <span className="text-sm text-gray-700">Category</span>
+          <select className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600" value={category} onChange={(e) => setCategory(e.target.value)}>
+            {['Web Dev', 'Design', 'Data', 'Mobile', 'AI'].map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </label>
         <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create course'}</Button>
         {error && <div className="text-sm text-red-600">{error}</div>}
       </form>

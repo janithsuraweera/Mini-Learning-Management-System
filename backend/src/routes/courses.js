@@ -8,7 +8,10 @@ const router = express.Router();
 
 // Public: list published courses
 router.get('/', async (req, res) => {
-  const courses = await Course.find({ isPublished: true }).populate('instructor', 'name');
+  const { category } = req.query;
+  const filter = { isPublished: true };
+  if (category && category !== 'All') filter.category = category;
+  const courses = await Course.find(filter).populate('instructor', 'name');
   res.json(courses);
 });
 
@@ -38,8 +41,8 @@ router.get('/:id/manage', requireAuth, requireRole('instructor', 'admin'), async
 
 // Instructor: create course
 router.post('/', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
-  const { title, description, price, isPublished } = req.body;
-  const course = await Course.create({ title, description, price: price ?? 19, isPublished: !!isPublished, instructor: req.user.id });
+  const { title, description, price, isPublished, category } = req.body;
+  const course = await Course.create({ title, description, price: price ?? 19, isPublished: !!isPublished, category: category || 'Web Dev', instructor: req.user.id });
   res.status(201).json(course);
 });
 
@@ -48,12 +51,14 @@ router.post('/seed', requireAuth, requireRole('instructor', 'admin'), async (req
   if (process.env.NODE_ENV === 'production') return res.status(403).json({ error: 'Forbidden' });
   const { count = 9 } = req.body || {};
   const n = Math.max(1, Math.min(30, Number(count) || 9));
+  const categories = ['Web Dev', 'Design', 'Data', 'Mobile', 'AI'];
   const samples = Array.from({ length: n }).map((_, i) => ({
     title: `Sample Course ${i + 1}`,
     description: 'A concise, practical course to learn modern skills with projects.',
     instructor: req.user.id,
     isPublished: true,
     price: 19 + (i % 3) * 10,
+    category: categories[i % categories.length],
     lessons: [
       { title: 'Introduction', content: '', order: 1 },
       { title: 'Core Concepts', content: '', order: 2 },

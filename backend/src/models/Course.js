@@ -17,6 +17,8 @@ const courseSchema = new mongoose.Schema(
     lessons: { type: [lessonSchema], default: [] },
     isPublished: { type: Boolean, default: false },
     price: { type: Number, default: 19, min: 0 }
+    ,
+    category: { type: String, enum: ['Web Dev', 'Design', 'Data', 'Mobile', 'AI'], default: 'Web Dev', index: true }
   },
   { timestamps: true }
 );

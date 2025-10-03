@@ -16,17 +16,13 @@ export default function CoursesPage() {
 
   useEffect(() => {
     axios
-      .get('/api/courses')
+      .get('/api/courses', { params: { category } })
       .then((res) => setCourses(res.data))
       .catch((err) => setError(err.response?.data?.error || 'Failed to load courses'));
-  }, []);
+  }, [category]);
 
   const filtered = useMemo(() => {
     let list = courses;
-    if (category !== 'All') {
-      const tag = category.toLowerCase();
-      list = list.filter((c) => (c.description || '').toLowerCase().includes(tag) || c.title.toLowerCase().includes(tag));
-    }
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       list = list.filter((c) => c.title.toLowerCase().includes(q) || (c.description || '').toLowerCase().includes(q));

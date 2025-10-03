@@ -11,6 +11,7 @@ export default function InstructorCourseEdit() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(19);
   const [publish, setPublish] = useState(false);
+  const [category, setCategory] = useState('Web Dev');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,6 +24,7 @@ export default function InstructorCourseEdit() {
         setDescription(c.description || '');
         setPrice(c.price || 19);
         setPublish(!!c.isPublished);
+        setCategory(c.category || 'Web Dev');
       })
       .catch((err) => setError(err.response?.data?.error || 'Failed to load course'));
   }, [id]);
@@ -32,7 +34,7 @@ export default function InstructorCourseEdit() {
     setError('');
     setLoading(true);
     try {
-      await api.put(`/courses/${id}`, { title, description, price: Number(price), isPublished: publish });
+      await api.put(`/courses/${id}`, { title, description, price: Number(price), isPublished: publish, lessons: undefined, category });
       navigate('/instructor');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save');
@@ -68,6 +70,14 @@ export default function InstructorCourseEdit() {
             <input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} /> Publish
           </label>
         </div>
+        <label className="grid gap-1">
+          <span className="text-sm text-gray-700">Category</span>
+          <select className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600" value={category} onChange={(e) => setCategory(e.target.value)}>
+            {['Web Dev', 'Design', 'Data', 'Mobile', 'AI'].map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </label>
         <div className="flex items-center gap-2">
           <Button type="submit" disabled={loading}>{loading ? 'Saving…' : 'Save changes'}</Button>
           <Button type="button" variant="outline" onClick={() => navigate('/instructor')}>Cancel</Button>
