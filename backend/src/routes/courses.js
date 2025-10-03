@@ -26,6 +26,16 @@ router.get('/:id', async (req, res) => {
   res.json(course);
 });
 
+// Instructor/Admin: get course for management (drafts allowed)
+router.get('/:id/manage', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (!course) return res.status(404).json({ error: 'Not found' });
+  if (String(course.instructor) !== req.user.id && req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  res.json(course);
+});
+
 // Instructor: create course
 router.post('/', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
   const { title, description, price, isPublished } = req.body;

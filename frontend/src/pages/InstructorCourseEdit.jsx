@@ -15,9 +15,8 @@ export default function InstructorCourseEdit() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    api.get(`/courses/mine`).then(() => {}).catch(() => {});
     api
-      .get(`/courses/${id}`)
+      .get(`/courses/${id}/manage`)
       .then((res) => {
         const c = res.data;
         setTitle(c.title || '');
