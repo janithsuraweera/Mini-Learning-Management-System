@@ -20,6 +20,12 @@ export default function Navbar() {
         </Link>
         <nav className="flex items-center gap-4 text-sm">
           <Link to="/courses" className="text-gray-600 hover:text-gray-900">Courses</Link>
+          {user?.role === 'admin' && (
+            <Link to="/admin" className="text-gray-600 hover:text-gray-900">Admin</Link>
+          )}
+          {user?.role === 'student' && (
+            <Link to="/me" className="text-gray-600 hover:text-gray-900">My Learning</Link>
+          )}
           <ThemeToggle />
           {user ? (
             <div className="flex items-center gap-3">
