@@ -119,6 +119,27 @@ router.post('/:id/enroll', requireAuth, requireRole('student', 'admin'), async (
   res.status(201).json(enrollment);
 });
 
+// Enrollment: count per course (public)
+router.get('/:id/enrollments/count', async (req, res) => {
+  const count = await Enrollment.countDocuments({ course: req.params.id });
+  res.json({ count });
+});
+
+// Enrollment: list students for instructor/admin
+router.get('/:id/enrollments', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (!course) return res.status(404).json({ error: 'Not found' });
+  if (String(course.instructor) !== req.user.id && req.user.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
+  const list = await Enrollment.find({ course: course._id }).populate('student', 'name email');
+  res.json(list);
+});
+
+// Enrollment: current user's enrollment status for a course
+router.get('/:id/enrollment/me', requireAuth, async (req, res) => {
+  const e = await Enrollment.findOne({ course: req.params.id, student: req.user.id });
+  res.json({ enrolled: !!e, progress: e?.progress ?? 0 });
+});
+
 // Student: my enrollments
 router.get('/me/enrollments/list', requireAuth, async (req, res) => {
   const enrollments = await Enrollment.find({ student: req.user.id }).populate('course');
