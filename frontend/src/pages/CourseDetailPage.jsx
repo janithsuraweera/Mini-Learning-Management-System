@@ -36,7 +36,7 @@ export default function CourseDetailPage() {
         <h1 className="text-2xl font-semibold">{course.title}</h1>
         <p className="mt-2 text-gray-700">{course.description}</p>
         <div className="mt-4 flex items-center gap-3">
-          <Button variant="gradient" onClick={buyAndEnroll}>Buy course • $19</Button>
+          <Button variant="gradient" onClick={buyAndEnroll}>Buy course • ${course.price || 19}</Button>
           <Button onClick={() => window.history.back()} variant="outline">Back</Button>
         </div>
         {message && <div className="mt-3 text-sm text-green-700">{message}</div>}

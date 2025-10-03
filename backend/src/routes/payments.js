@@ -12,8 +12,8 @@ router.post('/checkout', requireAuth, requireRole('student', 'admin'), async (re
   const course = await Course.findById(courseId);
   if (!course || !course.isPublished) return res.status(404).json({ error: 'Course not found' });
 
-  // mock price: $19 per course
-  const amount = 19;
+  // mock price from course
+  const amount = course.price ?? 19;
   await Payment.create({ user: req.user.id, course: course._id, amount, currency: 'USD', status: 'paid' });
   await Enrollment.findOneAndUpdate(
     { course: course._id, student: req.user.id },
@@ -22,6 +22,12 @@ router.post('/checkout', requireAuth, requireRole('student', 'admin'), async (re
   );
 
   return res.json({ success: true, message: 'Payment successful and enrolled', amount, currency: 'USD' });
+});
+
+// List my payments
+router.get('/me', requireAuth, async (req, res) => {
+  const items = await Payment.find({ user: req.user.id }).populate('course', 'title');
+  res.json(items);
 });
 
 export default router;

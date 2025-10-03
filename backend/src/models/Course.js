@@ -15,7 +15,8 @@ const courseSchema = new mongoose.Schema(
     description: { type: String, default: '' },
     instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     lessons: { type: [lessonSchema], default: [] },
-    isPublished: { type: Boolean, default: false }
+    isPublished: { type: Boolean, default: false },
+    price: { type: Number, default: 19, min: 0 }
   },
   { timestamps: true }
 );

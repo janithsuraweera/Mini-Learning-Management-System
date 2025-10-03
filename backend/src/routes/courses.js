@@ -27,8 +27,8 @@ router.get('/:id', async (req, res) => {
 
 // Instructor: create course
 router.post('/', requireAuth, requireRole('instructor', 'admin'), async (req, res) => {
-  const { title, description } = req.body;
-  const course = await Course.create({ title, description, instructor: req.user.id });
+  const { title, description, price } = req.body;
+  const course = await Course.create({ title, description, price: price ?? 19, instructor: req.user.id });
   res.status(201).json(course);
 });
 
@@ -42,6 +42,7 @@ router.post('/seed', requireAuth, requireRole('instructor', 'admin'), async (req
     description: 'A concise, practical course to learn modern skills with projects.',
     instructor: req.user.id,
     isPublished: true,
+    price: 19 + (i % 3) * 10,
     lessons: [
       { title: 'Introduction', content: '', order: 1 },
       { title: 'Core Concepts', content: '', order: 2 },
