@@ -12,12 +12,14 @@ import HomePage from './pages/HomePage.jsx';
 import { ToastProvider } from './components/Toast.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import StudentDashboard from './pages/StudentDashboard.jsx';
+import Footer from './components/Footer.jsx';
 
 function Layout({ children }) {
   return (
     <div className="min-h-dvh text-gray-900 dark:text-gray-100">
       <Navbar />
       <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+      <Footer />
     </div>
   );
 }
